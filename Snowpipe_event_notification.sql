@@ -47,7 +47,7 @@ SELECT * FROM TABLE(VALIDATE_PIPE_LOAD(
     PIPE_NAME => 'emp_pipe',
     START_TIME => DATEADD(HOUR,-2,CURRENT_TIMESTAMP())))
 
-// COPY command history from table to see error massage
+// COPY command history from table to see error message
 
 SELECT * FROM TABLE (INFORMATION_SCHEMA.COPY_HISTORY(
    table_name  =>  'EMPLOYEE',

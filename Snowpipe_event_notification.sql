@@ -52,3 +52,8 @@ SELECT * FROM TABLE(VALIDATE_PIPE_LOAD(
 SELECT * FROM TABLE (INFORMATION_SCHEMA.COPY_HISTORY(
    table_name  =>  'EMPLOYEE',
    START_TIME =>DATEADD(HOUR,-2,CURRENT_TIMESTAMP())))
+
+
+//to pause a pipe
+
+alter pipe emp_pipe set pipe_execution_paused = true

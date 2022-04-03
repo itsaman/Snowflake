@@ -47,3 +47,19 @@ $$
     return "Success"
 $$;
 
+
+--time travel dynamic
+create or replace procedure time_proc(num varchar, DB varchar, Sch varchar, Tab varchar)
+returns string not null
+language Javascript
+as 
+$$
+    var final = "";
+    var state = "select name, cid, price from "+DB+"."+SCH+"."+TAB+ " before(offset => -60 *"+ NUM+ ")";
+    var res = snowflake.createStatement({sqlText: state}).execute();
+    while(res.next()){
+    final = final + res.getColumnValue(1) +","+ res.getColumnValue(2) +","+ res.getColumnValue(3)+ "\n"; 
+    }
+    return final;
+$$;
+

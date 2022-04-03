@@ -73,4 +73,20 @@ $$
     return 1;
 $$;
 
+--update the table columns
 
+create or replace procedure mutli_sal()
+returns varchar not null
+language javascript
+as 
+$$
+    var sql_stat = 'select * from emp';
+    var res = snowflake.createStatement({sqlText: sql_stat}).execute();
+    while(res.next()){
+        var salary = res.getColumnValue(4);
+        var new_salary = salary*10;
+        var sql_stat2 = 'update emp set salary = :1 where salary = :2';
+        var res2 = snowflake.createStatement({sqlText: sql_stat2, binds:[new_salary, salary]}).execute();
+    }
+    return 0.0;
+$$;

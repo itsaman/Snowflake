@@ -90,3 +90,26 @@ $$
     }
     return 0.0;
 $$;
+
+
+
+--Log errors
+create or replace procedure broken()
+returns varchar not null
+language javascript
+as 
+$$
+    var result;
+    try{
+        snowflake.execute({sqlText: 'Invalid Commands!: '});
+        result = "Successed";
+        }
+    catch(err){
+        result  = "Failed";
+        snowflake.execute({sqlText: 'insert into log_error values(?,?,?,?)', binds:[err.code,err.state, err.message, err.stackTraceTxt]});   
+    }
+    return result;
+$$;
+
+
+

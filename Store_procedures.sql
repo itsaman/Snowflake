@@ -62,6 +62,15 @@ $$
     return "Success"
 $$;
 
-
+---Parameter and binds
+create or replace procedure pram_ins(eid float, ename string, eaddress string)
+returns FLOAT not null 
+language javascript
+as 
+$$
+    var sql_stat = 'insert into emp values(:1,:2,:3)';
+    var res = snowflake.createStatement({sqlText: sql_stat,binds: [EID, ENAME, EADDRESS]}).execute();
+    return 1;
+$$;
 
 

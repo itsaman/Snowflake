@@ -30,23 +30,6 @@ $$
     }
     return counter;
 $$;
-    
-  
- --variables and binds
-
-create or replace procedure insert_proc()
-returns varchar not null
-language javascript
-as
-$$
-    var id = 1;
-    var name = 'Suresh';
-    var address = 'Uttar Pradesh';
-    var sql_stat = 'insert into emp values(:1,:2,:3)';
-    var res = snowflake.createStatement({sqlText: sql_stat, binds:[id,name, address]}).execute();
-    return "Success"
-$$;
-
 
 --time travel dynamic
 create or replace procedure time_proc(num varchar, DB varchar, Sch varchar, Tab varchar)
@@ -62,4 +45,23 @@ $$
     }
     return final;
 $$;
+    
+  
+ --local variables and binds
+
+create or replace procedure insert_proc()
+returns varchar not null
+language javascript
+as
+$$
+    var id = 1;
+    var name = 'Suresh';
+    var address = 'Uttar Pradesh';
+    var sql_stat = 'insert into emp values(:1,:2,:3)';
+    var res = snowflake.createStatement({sqlText: sql_stat, binds:[id,name, address]}).execute();
+    return "Success"
+$$;
+
+
+
 

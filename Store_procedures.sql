@@ -1,3 +1,4 @@
+--droping all the tasks 
 create or replace procedure drop_all()
 returns string not null
 language javascript
@@ -31,3 +32,18 @@ $$
 $$;
     
   
+ --variables and binds
+
+create or replace procedure insert_proc()
+returns varchar not null
+language javascript
+as
+$$
+    var id = 1;
+    var name = 'Suresh';
+    var address = 'Uttar Pradesh';
+    var sql_stat = 'insert into emp values(:1,:2,:3)';
+    var res = snowflake.createStatement({sqlText: sql_stat, binds:[id,name, address]}).execute();
+    return "Success"
+$$;
+

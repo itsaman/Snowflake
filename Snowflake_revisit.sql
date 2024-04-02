@@ -75,7 +75,7 @@ select SYSTEM$CLUSTERING_DEPTH('LINEITEM')
 use role accountadmin;
 
 
-CREATE STORAGE INTEGRATION aws_sf_data
+CREATE or replace STORAGE INTEGRATION aws_sf_data
     TYPE = EXTERNAL_STAGE
     STORAGE_PROVIDER = S3
     ENABLED = TRUE
@@ -88,16 +88,54 @@ DESC INTEGRATION aws_sf_data;
 
 -------- Copy data to table ----------------
 use role sysadmin;
+use schema ECOMMERCE_DB.ECOMMEERCE_LIV;
+
+--Table
+CREATE OR REPLACE TABLE ARTIST(
+    artist_id varchar,
+    name varchar,
+    artist_popularity varchar,
+    artist_genres VARIANT,
+    followers varchar
+);
 
 
+-- File Format
+
+CREATE OR REPLACE FILE FORMAT artist_format
+TYPE = CSV
+COMPRESSION = AUTO
+FIELD_DELIMITER = ' '
+RECORD_DELIMITER = '/n'
+SKIP_HEADER = 1
+ERROR_ON_COLUMN_COUNT_MISMATCH = TRUE;
 
 
+-- Stage
+
+create or replace stage artist_stage_new
+storage_integration = aws_sf_data
+url = 's3://snowflake-landing2024/ecommerce_dev/lineitems/lineitem_csv/Spotify artist data 2023.tsv'
+file_format = artist_format;
+
+list @artist_stage;
+
+SELECT t.$1, t.$2, t.$3, t.$4, t.$5, t.$6, t.$7, t.$8, t.$9, t.$10, t.$11, t.$12 FROM @artist_stage_new t;
 
 
+--Copy command
+
+copy into ARTIST from @artist_stage_new
+VALIDATION_MODE = RETURN_ALL_ERRORS
+ON_ERROR = CONTINUE;
+
+select * from ARTIST;
 
 
+INSERT INTO ARTIST (artist_id, name, artist_popularity, followers,genre_0,genre_1,genre_2,genre_3,genre_4,genre_5,genre_6) SELECT t.$1, t.$2, t.$3, t.$5, t.$6, t.$7, t.$8, t.$9, t.$10, t.$11, t.$12 FROM @artist_stage t;
 
 
+-- Ingest JSON data
 
 
 

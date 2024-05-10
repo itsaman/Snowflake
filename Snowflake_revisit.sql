@@ -30,6 +30,7 @@ select * from trans_order;
 -- Materialized
 -- Secure
 
+-- Materialized views are helpfull when we need to imporve performance of external table 
 
 CREATE OR REPLACE VIEW Order_view as select * from ORDERS where O_ORDERPRIORITY = '1-URGENT';
 
